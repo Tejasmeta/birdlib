@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bird Recognition</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f1f1f1;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #output img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border: 5px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        #prediction {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            padding: 10px 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            #prediction {
+                font-size: 20px;
+                padding: 8px 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            #prediction {
+                font-size: 18px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <div id="prediction">No prediction yet</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const output = document.getElementById('output');
+            const prediction = document.getElementById('prediction');
+            const imageData = localStorage.getItem('imageData');
+
+            if (imageData) {
+                const img = document.createElement('img');
+                img.src = imageData;
+                output.appendChild(img);
+
+                // Create form data
+                const formData = new FormData();
+                formData.append('image', dataURItoBlob(imageData), 'image.png');
+
+                // Send the image data to the server for prediction
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.predicted_species) {
+                        prediction.innerHTML = `Predicted Species: ${data.predicted_species}`;
+                        localStorage.setItem('predictedSpecies', data.predicted_species);
+                    } else {
+                        prediction.innerHTML = `Error: ${data.error}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    prediction.innerHTML = 'Error predicting species';
+                });
+            } else {
+                output.innerHTML = 'No image to display';
+            }
+        });
+
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+    </script>
+</body>
+</html>

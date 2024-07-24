@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-image:url('/static/bird1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .logo h2 {
+            color: white;
+            font-size: 4vw;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .about {
+            background-color: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            color: aliceblue;
+            padding: 20px;
+            border: 2px dashed;
+            margin: 20px;
+        }
+
+        .about h2 {
+            font-size: 2vw;
+        }
+
+        .link {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: aliceblue;
+            font-size: 3vw;
+            transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+        }
+
+        .link a:hover {
+            color: yellow;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px yellow;
+        }
+
+        @media (max-width: 600px) {
+            .logo h2 {
+                font-size: 6vw;
+            }
+
+            .about h2 {
+                font-size: 5vw;
+            }
+
+            .link a {
+                font-size: 5vw;
+            }
+
+            .link a:hover {
+                font-size: 5.5vw;
+            }
+        }
+    </style>
+    <title>Birds Project</title>
+</head>
+<body>
+    <div class="logo">
+        <img src="static\rrce-clg-logo.png" alt="RRCE Logo">
+    </div>
+    <div class="about">
+        <h2>MINI PROJECT</h2>
+        <h2>TOPIC: BUILDING NEURAL NETWORK FOR BIRD RECOGNITION</h2>
+        <h2>NITIN MOHAN</h2>
+        <h2>TEJAS S</h2>
+        <h2>OMKAR N</h2>
+        <h2>CHRIS AARON RODRIGUES</h2>
+    </div>
+    <div class="link">
+        <a href="index1.html">Click me to experience the world beyond yourself</a>
+    </div>
+</body>
+</html>
