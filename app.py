@@ -41,27 +41,9 @@ if os.path.exists(MODEL_PATH):
 def index():
     return render_template('index.html')
 
-@app.route('/index1.html')
-def index1():
-    return render_template('index1.html')
-
 @app.route('/upload.html')
 def upload():
     return render_template('upload.html')
-
-@app.route('/display.html')
-def display():
-    label = request.args.get('label')
-    image_data = request.args.get('image_data')
-    return render_template('display.html', label=label, image_data=image_data)
-
-def process_image(image_data):
-    try:
-        image = Image.open(io.BytesIO(image_data)).convert('RGB').resize((128, 128))
-        return np.array(image).flatten() / 255.0
-    except Exception as e:
-        print(f"❌ Error processing image: {e}")
-        return None
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -73,20 +55,21 @@ def predict():
 
     try:
         image_file = request.files['image']
-        img_array = process_image(image_file.read())
+        image = Image.open(io.BytesIO(image_file.read())).convert('RGB').resize((128, 128))
+        img_array = np.array(image).flatten() / 255.0  # Normalize
 
-        if img_array is None:
-            return jsonify({'error': 'Invalid image format'}), 400
+        if img_array.shape[0] != 128 * 128 * 3:  # Ensure correct shape
+            return jsonify({'error': 'Invalid image size!'}), 400
 
-        img_array = np.expand_dims(img_array, axis=0)  # Ensure correct shape
+        img_array = np.expand_dims(img_array, axis=0)  # Convert to 2D array
         prediction = model.predict(img_array)
         predicted_species = label_encoder.inverse_transform(prediction)[0]
 
         return jsonify({'predicted_species': predicted_species})
     except Exception as e:
-        print(f"❌ Error in prediction: {e}")
+        print(f"❌ Error in prediction: {e}")  # Print error in logs
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  # Use Render’s PORT variable
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)  # Enable Debug Mode
