@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 from flask import Flask, request, render_template, jsonify
@@ -31,7 +30,12 @@ def load_model(model_path):
         model, label_encoder = pickle.load(file)
     return model, label_encoder
 
-model, label_encoder = load_model("model.pkl")
+# Ensure the model file exists
+MODEL_PATH = "model.pkl"
+if os.path.exists(MODEL_PATH):
+    model, label_encoder = load_model(MODEL_PATH)
+else:
+    model, label_encoder = None, None
 
 @app.route('/')
 def index():
@@ -57,6 +61,8 @@ def process_image(image_data):
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    if model is None:
+        return jsonify({'error': 'Model not loaded!'}), 500
     try:
         image_file = request.files['image']
         img_array = process_image(image_file.read())
@@ -66,6 +72,6 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-
-
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Use Render’s PORT variable
+    app.run(host="0.0.0.0", port=port)
