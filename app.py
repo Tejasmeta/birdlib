@@ -26,7 +26,7 @@ class FastNeuralNetwork:
         return np.argmax(self.forward(X), axis=1)
 
 # Load Model Safely
-MODEL_PATH = "model.pkl"
+MODEL_PATH = "model.ipynb"
 model, label_encoder = None, None
 
 if os.path.exists(MODEL_PATH):
