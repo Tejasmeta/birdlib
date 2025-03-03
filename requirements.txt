@@ -73,5 +73,4 @@ wcwidth==0.2.13
 Werkzeug==3.0.3
 wrapt==1.16.0
 Gunicorn
-Pickle 
 
