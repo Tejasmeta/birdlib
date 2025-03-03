@@ -50,7 +50,6 @@ pure-eval==0.2.2
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
 python-version==0.0.2
-pywin32==306
 pyzmq==26.0.3
 requests==2.32.3
 rich==13.7.1
@@ -74,5 +73,4 @@ Werkzeug==3.0.3
 wrapt==1.16.0
 Gunicorn
 Pickle 
-pywin32==306
 
